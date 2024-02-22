@@ -12,16 +12,11 @@
             width: 100,
             height: 50,
             src: "Rakete.png",
-            direction: 1
+            direction: 1,
+            img: new Image()
         }
 
-        let ufo = {
-            x: 500,
-            y: 200,
-            width: 80,
-            height: 80,
-            src: "ufo.png"
-        }
+        let ufos = [];
 
         let KEY_SPACE = false;
         let KEY_UP = false;
@@ -52,6 +47,20 @@
 
         function startGame() {
             loadsite();
+            setInterval(createUfo, 5000);
+        }
+
+        function createUfo() {
+            let ufo = {
+                x: 500,
+                y: 200,
+                width: 80,
+                height: 80,
+                src: "ufo.png",
+                img: new Image()
+            };
+            ufo.img.src = ufo.src;
+            ufos.push(ufo);
         }
 
         function loadsite() {
@@ -61,10 +70,7 @@
             backgroundImage = new Image();
             backgroundImage.src = "hintergrund.png";
             backgroundImage.onload = function () {
-                rakete.img = new Image();
                 rakete.img.src = rakete.src;
-                ufo.img = new Image();
-                ufo.img.src = ufo.src;
 
                 // Rufe draw() nach dem Laden des Hintergrundbildes auf
                 draw();
@@ -75,20 +81,28 @@
             // Zeichne den Hintergrund
             ctx.drawImage(backgroundImage, 0, 0);
 
-            // Zeichne die Rakete und das UFO
+            // Zeichne die Rakete
             ctx.drawImage(rakete.img, rakete.x, rakete.y, rakete.width, rakete.height);
-            ctx.drawImage(ufo.img, ufo.x, ufo.y, ufo.width, ufo.height);
 
-            // Hier kannst du die Rakete basierend auf den Tasteneingaben bewegen
+            // Bewege die Rakete basierend auf den Tasteneingaben
+            update();
+
+            // Zeichne die UFOs
+            ufos.forEach(function (ufo) {
+                ctx.drawImage(ufo.img, ufo.x, ufo.y, ufo.width, ufo.height);
+            });
+
+            // Hier wird der eigentliche Zeichnungscode eingefügt
+            requestAnimationFrame(draw);
+        }
+
+        function update() {
             if (KEY_UP) {
                 rakete.y -= 5;
             }
             if (KEY_DOWN) {
                 rakete.y += 5;
             }
-
-            // Hier wird der eigentliche Zeichnungscode eingefügt
-            requestAnimationFrame(draw);
         }
     </script>
 </head>
